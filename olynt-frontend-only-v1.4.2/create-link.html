@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Olynt — Create Link</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <div class="brand">
+        <img src="./assets/olynt-logo.png" alt="Olynt" class="logo-img" />
+        <div>
+          <h1 id="appName">Olynt</h1>
+          <p>USDC + USDT • 2% fee on top (customer pays)</p>
+        </div>
+      </div>
+      <div class="nav">
+        <a class="pill" href="./index.html">Home</a>
+        <a class="pill active" href="./create-link.html">Create Link</a>
+        <a class="pill" href="./pay.html">Pay</a>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h2>Link details</h2>
+        <div class="form">
+          <label>Merchant wallet</label>
+          <input id="merchant" placeholder="0x..." />
+
+          <div class="row2">
+            <div>
+              <label>Amount (USD)</label>
+              <input id="amount" type="number" min="0" step="0.01" placeholder="25" />
+            </div>
+            <div>
+              <label>Token</label>
+              <select id="token"></select>
+            </div>
+          </div>
+
+          <div class="row2">
+            <div>
+              <label>Network</label>
+              <select id="network"></select>
+            </div>
+            <div>
+              <label>Expires</label>
+              <select id="expires"></select>
+            </div>
+          </div>
+
+          <label>Memo (optional)</label>
+          <input id="memo" placeholder="e.g. restaurant order #1042, membership fee…" />
+
+          <div class="actions">
+            <button id="generateLinkBtn" class="btn primary">Generate Real Link</button>
+            <button id="copyLinkBtn" class="btn">Copy Link</button>
+            <button id="openPayBtn" class="btn">Open Pay Page</button>
+          </div>
+
+          <label>Share this link</label>
+          <input id="shareLink" readonly placeholder="pay.html?rid=OLY-XXXX-XXXX" />
+
+          <p class="hint">
+            <b>Link mode:</b> links are saved in your browser (the URL). If you open the link on a different phone/computer, it won't find the receipt unless you add a backend later.
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Preview</h2>
+
+        <div class="receiptBox">
+          <div class="receiptRow">
+            <div class="muted">Receipt</div>
+            <div id="ridLabel" class="mono">OLY-XXXX-XXXX</div>
+          </div>
+
+          <div class="receiptRow"><div class="muted">Amount</div><div id="pvAmount">$25.00</div></div>
+          <div class="receiptRow"><div class="muted">Token</div><div id="pvToken">USDC</div></div>
+          <div class="receiptRow"><div class="muted">Network</div><div id="pvNetwork">Base</div></div>
+          <div class="receiptRow"><div class="muted">Fee (2%)</div><div id="pvFee">$0.50</div></div>
+          <div class="receiptRow"><div class="muted">Total</div><div id="pvTotal">$25.50</div></div>
+          <div class="receiptRow"><div class="muted">Status</div><div id="pvStatus">Pending</div></div>
+          <div class="receiptRow"><div class="muted">Expires</div><div id="pvExpires">15m</div></div>
+        </div>
+
+        <div id="status" class="status warn">—</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      © <span id="year"></span> Olynt
+    </div>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+<!-- Wallet Modal -->
+<div class="modal-backdrop" id="walletModalBackdrop" aria-hidden="true">
+  <div class="modal" id="walletModal" role="dialog" aria-modal="true" aria-label="Connect wallet">
+    <div class="modal-header">
+      <div class="modal-title">
+        <div class="eyebrow">CONNECT WALLET</div>
+        <h3 class="h">Choose a wallet.</h3>
+      </div>
+      <button class="modal-close" id="walletModalClose" aria-label="Close">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="wallet-grid">
+        <div class="wallet-card" data-wallet="injected">
+          <div class="wallet-name">MetaMask</div>
+          <p class="wallet-desc">Browser wallet for Base/BSC/Polygon.</p>
+        </div>
+        <div class="wallet-card" data-wallet="walletconnect">
+          <div class="wallet-name">WalletConnect</div>
+          <p class="wallet-desc">Connect mobile wallets via QR.</p>
+        </div>
+        <div class="wallet-card" data-wallet="coinbase">
+          <div class="wallet-name">Coinbase Wallet</div>
+          <p class="wallet-desc">Simple stablecoin payments.</p>
+        </div>
+        <div class="wallet-card" data-wallet="trust">
+          <div class="wallet-name">Trust Wallet</div>
+          <p class="wallet-desc">Popular in many communities.</p>
+        </div>
+      </div>
+      <div class="modal-note" id="walletModalNote">
+        Tip: Mobile wallets use WalletConnect. If WalletConnect is not configured yet, set <code>WALLETCONNECT_PROJECT_ID</code> in <code>config.js</code>.
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
