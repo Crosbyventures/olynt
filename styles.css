@@ -1,0 +1,210 @@
+:root{
+  /* Olynt dark + orange theme */
+  --bg:#0c0f16;
+  --card:#121a25;
+  --card2:#0f1620;
+  --text:#ece5d6;
+  --muted:#a8b0bf;
+  --border:#2a2f3a;
+
+  --good:#22c55e;
+  --warn:#f59e0b;
+  --bad:#ef4444;
+
+  --btn:#1b2431;
+  --btnHover:#233044;
+
+  --accent:#f59e0b;
+  --accent2:#ffb020;
+  --shadow: rgba(0,0,0,0.35);
+}
+
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+
+body{
+  margin:0;
+  font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+  background:
+    radial-gradient(1200px 800px at 20% 0%, #1a2433 0%, var(--bg) 62%),
+    radial-gradient(900px 700px at 85% 25%, #121a25 0%, var(--bg) 60%);
+  color:var(--text);
+}
+
+/* ===== LAYOUT ===== */
+.container{
+  max-width:980px;
+  margin:0 auto;
+  padding:28px 16px 40px;
+}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:18px;
+}
+
+/* ===== BRAND ===== */
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+/* ❌ OLD ORANGE SQUARE (DISABLED) */
+.logo{ display:none; }
+
+/* ✅ REAL IMAGE LOGO (32x32) */
+.logo-img{
+  width:32px;
+  height:32px;
+  object-fit:contain;
+  border-radius:8px;
+  filter: drop-shadow(0 0 6px rgba(255,165,0,.45));
+}
+
+.brand h1{
+  font-size:16px;
+  margin:0;
+  letter-spacing:.4px;
+}
+
+.brand p{
+  margin:2px 0 0;
+  color:var(--muted);
+  font-size:12px;
+}
+
+/* ===== NAV ===== */
+.nav{ display:flex; gap:10px; align-items:center; }
+
+.pill{
+  padding:8px 12px;
+  border:1px solid var(--border);
+  border-radius:999px;
+  color:var(--text);
+  text-decoration:none;
+  background:rgba(255,255,255,0.02);
+}
+
+.pill:hover{ border-color:rgba(245,158,11,.5); }
+
+.pill.active{
+  background:linear-gradient(135deg, rgba(245,158,11,.18), rgba(255,122,24,.10));
+  border-color:rgba(245,158,11,.55);
+}
+
+/* ===== GRID ===== */
+.grid{ display:grid; gap:14px; grid-template-columns:1fr; }
+@media (min-width:920px){
+  .grid{ grid-template-columns:1.1fr .9fr; }
+}
+
+/* ===== CARDS ===== */
+.card{
+  background:linear-gradient(180deg, rgba(18,26,37,.92), rgba(15,22,32,.92));
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:16px;
+  box-shadow:0 20px 60px var(--shadow);
+}
+
+.card h2{
+  margin:0 0 10px;
+  font-size:14px;
+  color:#f3f4f6;
+}
+
+/* ===== FORMS ===== */
+label{ font-size:12px; color:var(--muted); }
+
+input, textarea, select{
+  width:100%;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:rgba(12,15,22,.55);
+  color:var(--text);
+  padding:11px 12px;
+  outline:none;
+}
+
+input:focus, textarea:focus, select:focus{
+  border-color:rgba(245,158,11,.55);
+  box-shadow:0 0 0 3px rgba(245,158,11,.12);
+}
+
+textarea{ min-height:72px; resize:vertical; }
+
+/* ===== BUTTONS ===== */
+.btn{
+  border:1px solid var(--border);
+  background:var(--btn);
+  color:var(--text);
+  padding:11px 14px;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:700;
+}
+
+.btn:hover{ background:var(--btnHover); }
+
+.btn.primary{
+  background:linear-gradient(135deg, var(--accent), var(--accent2));
+  border:0;
+  color:#101010;
+  box-shadow:0 10px 26px rgba(245,158,11,.18);
+}
+
+.btn.primary:hover{ filter:brightness(1.05); }
+
+/* ===== UTIL ===== */
+.actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+.hint{ margin-top:10px; color:var(--muted); font-size:12px; line-height:1.4; }
+.footer{ margin-top:16px; color:var(--muted); font-size:12px; text-align:center; }
+.hidden{ display:none !important; }
+
+/* ===== STATUS ===== */
+.status{
+  margin-top:14px;
+  padding:12px 14px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.02);
+}
+
+.status.good{
+  border-color:rgba(34,197,94,.55);
+  background:rgba(34,197,94,.08);
+}
+.status.warn{
+  border-color:rgba(245,158,11,.55);
+  background:rgba(245,158,11,.08);
+}
+.status.bad{
+  border-color:rgba(239,68,68,.55);
+  background:rgba(239,68,68,.08);
+}
+
+/* ===== WALLET MODAL ===== */
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  z-index:9999;
+}
+.modal-backdrop.show{ display:flex; }
+
+.modal{
+  width:min(860px,100%);
+  border-radius:18px;
+  border:1px solid var(--border);
+  background:linear-gradient(180deg, rgba(18,26,37,.98), rgba(15,22,32,.98));
+  box-shadow:0 30px 90px rgba(0,0,0,.55);
+  overflow:hidden;
+}

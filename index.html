@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Olynt — USDC/USDT Checkout</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <div class="brand">
+        <img src="./assets/olynt-logo.png" alt="Olynt" class="logo-img" />
+        <div>
+          <h1 id="landingTitle">Olynt Pay</h1>
+          <p>USDC + USDT • Base / OP / Arbitrum / Polygon / Ethereum / BSC • 2% fee on top</p>
+        </div>
+      </div>
+      <div class="nav">
+        <a class="pill active" href="./index.html">Home</a>
+        <a class="pill" href="./create-link.html">Create Link</a>
+        <a class="pill" href="./pay.html">Pay</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>How it works</h2>
+      <ol class="muted">
+        <li>Merchant creates a payment link on <b>Create Link</b> (amount, token, network, memo).</li>
+        <li>Customer opens the link and pays on <b>Pay</b>.</li>
+        <li>Customer signs <b>2 transfers</b>: merchant amount + 2% fee to the treasury wallet.</li>
+      </ol>
+      <div class="actions">
+        <a class="btn primary" href="./create-link.html">Create a Link</a>
+        <a class="btn" href="./pay.html">Open Pay Page</a>
+      </div>
+      <p class="hint">
+        Frontend-only mode uses localStorage for receipts. For public sharing across devices, add a tiny backend later.
+      </p>
+    </div>
+
+    <div class="footer">
+      © <span id="year"></span> Olynt
+    </div>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+<!-- Wallet Modal -->
+<div class="modal-backdrop" id="walletModalBackdrop" aria-hidden="true">
+  <div class="modal" id="walletModal" role="dialog" aria-modal="true" aria-label="Connect wallet">
+    <div class="modal-header">
+      <div class="modal-title">
+        <div class="eyebrow">CONNECT WALLET</div>
+        <h3 class="h">Choose a wallet.</h3>
+      </div>
+      <button class="modal-close" id="walletModalClose" aria-label="Close">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="wallet-grid">
+        <div class="wallet-card" data-wallet="injected">
+          <div class="wallet-name">MetaMask</div>
+          <p class="wallet-desc">Browser wallet for Base/BSC/Polygon.</p>
+        </div>
+        <div class="wallet-card" data-wallet="walletconnect">
+          <div class="wallet-name">WalletConnect</div>
+          <p class="wallet-desc">Connect mobile wallets via QR.</p>
+        </div>
+        <div class="wallet-card" data-wallet="coinbase">
+          <div class="wallet-name">Coinbase Wallet</div>
+          <p class="wallet-desc">Simple stablecoin payments.</p>
+        </div>
+        <div class="wallet-card" data-wallet="trust">
+          <div class="wallet-name">Trust Wallet</div>
+          <p class="wallet-desc">Popular in many communities.</p>
+        </div>
+      </div>
+      <div class="modal-note" id="walletModalNote">
+        Tip: Mobile wallets use WalletConnect. If WalletConnect is not configured yet, set <code>WALLETCONNECT_PROJECT_ID</code> in <code>config.js</code>.
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
