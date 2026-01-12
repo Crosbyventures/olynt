@@ -147,13 +147,10 @@ function initPOSPage() {
   // Only run on POS page (index.html)
   if (!$("posAmount")) return false;
 
-  // Try to fill common header/footer bits if present
   setText("year", String(new Date().getFullYear()));
   if ($("landingTitle")) setText("landingTitle", `${APP_NAME} Pay`);
 
-  // Optional: show a simple status area if your index has #status
-  setStatus("good", "POS ready. Connect wallet to start.");
-
+  const merchantInput = $("posMerchant");
   const chainSel = $("posChain");
   const tokenSel = $("posToken");
 
@@ -168,8 +165,6 @@ function initPOSPage() {
 
   function refreshTokens() {
     const chainId = Number(chainSel.value);
-
-    // tokens that exist on this chain
     const tokenOptions = Object.keys(TOKENS)
       .filter((k) => !!TOKENS[k]?.addresses?.[chainId])
       .map((k) => ({ value: k, label: k }));
@@ -183,21 +178,23 @@ function initPOSPage() {
   }
 
   refreshTokens();
+
+  function setPOSHeader(amount, tokenKey, chainId) {
+    setText("posDisplayAmount", amount ? `$${fmtMoney(amount)}` : "$0.00");
+    const chainName = CHAINS[Number(chainId)]?.name || "—";
+    setText("posDisplaySub", `${tokenKey || "—"} • ${chainName}`);
+  }
+
   chainSel.addEventListener("change", () => {
     refreshTokens();
-    // update header preview
-    const tokenKey = tokenSel.value;
-    const chainId = Number(chainSel.value);
-    setText("posDisplaySub", `${tokenKey || "—"} • ${CHAINS[chainId]?.name || "—"}`);
+    setPOSHeader($("posAmount")?.value || "", tokenSel.value, Number(chainSel.value));
   });
 
   tokenSel.addEventListener("change", () => {
-    const tokenKey = tokenSel.value;
-    const chainId = Number(chainSel.value);
-    setText("posDisplaySub", `${tokenKey || "—"} • ${CHAINS[chainId]?.name || "—"}`);
+    setPOSHeader($("posAmount")?.value || "", tokenSel.value, Number(chainSel.value));
   });
 
-  // Wallet modal open/close
+  // Wallet modal open/close (optional)
   const backdrop = $("walletModalBackdrop");
   const openBtn = $("btnOpenWalletModal");
   const closeBtn = $("walletModalClose");
@@ -208,10 +205,32 @@ function initPOSPage() {
   if (openBtn) openBtn.addEventListener("click", openModal);
   if (closeBtn) closeBtn.addEventListener("click", closeModal);
 
-  // Merchant connected wallet
-  let merchantWallet = "";
-
+  // Optional: connect wallet to auto-fill merchant address
+  let connectedWallet = "";
   const walletPill = $("walletPill");
+
+  async function connectAndFill() {
+    try {
+      const { account, chainId } = await connectWallet();
+      connectedWallet = account;
+
+      if (merchantInput) merchantInput.value = account;
+
+      if (walletPill) {
+        walletPill.style.display = "inline-flex";
+        walletPill.textContent = clampAddress(account);
+      }
+
+      setStatus("good", `Connected (${CHAINS[chainId]?.name || chainId}). Address filled ✅`);
+    } catch (e) {
+      setStatus("bad", e.message || "Wallet error.");
+    }
+  }
+
+  $("btnUseConnected")?.addEventListener("click", () => {
+    // if in normal browser with no wallet, this will fail safely
+    connectAndFill();
+  });
 
   // Wallet cards: only injected wired for now
   document.querySelectorAll(".wallet-card").forEach((card) => {
@@ -223,37 +242,17 @@ function initPOSPage() {
         setStatus("warn", "WalletConnect/Coinbase/Trust not configured yet. Use MetaMask for now.");
         return;
       }
-
-      try {
-        const { account, chainId } = await connectWallet();
-        merchantWallet = account;
-
-        if (walletPill) {
-          walletPill.style.display = "inline-flex";
-          walletPill.textContent = clampAddress(account);
-        }
-
-        setStatus("good", `Wallet connected (${CHAINS[chainId]?.name || chainId}).`);
-      } catch (e) {
-        setStatus("bad", e.message || "Wallet error.");
-      }
+      await connectAndFill();
     });
   });
 
-  // QR + link
-  function setPOSHeader(amount, tokenKey, chainId) {
-    setText("posDisplayAmount", amount ? `$${fmtMoney(amount)}` : "$0.00");
-    const chainName = CHAINS[Number(chainId)]?.name || "—";
-    setText("posDisplaySub", `${tokenKey || "—"} • ${chainName}`);
-  }
-
-  function buildPOSPayLink({ merchant, amount, tokenKey, chainId, memo }) {
+  function buildPOSPayLink({ merchant, amount, tokenKey, chainId, memo, staticOnly }) {
     const base = `${window.location.origin}${window.location.pathname.replace(/[^/]+$/, "")}`;
     const qs = new URLSearchParams();
     qs.set("merchant", merchant);
-    qs.set("amount", String(amount));
     qs.set("token", tokenKey);
     qs.set("chainId", String(chainId));
+    if (!staticOnly) qs.set("amount", String(amount));
     if (memo) qs.set("memo", memo);
     return `${base}pay.html?${qs.toString()}`;
   }
@@ -267,13 +266,18 @@ function initPOSPage() {
       qrBox.innerHTML = `<div class="pos-qr-placeholder">QR library missing</div>`;
       return;
     }
-    // QRCode is global from qrcodejs
+
     // eslint-disable-next-line no-undef
-    new QRCode(qrBox, {
-      text: link,
-      width: 260,
-      height: 260,
-    });
+    new QRCode(qrBox, { text: link, width: 260, height: 260 });
+  }
+
+  function getMerchant() {
+    const m = (merchantInput?.value || "").trim();
+    return m;
+  }
+
+  function validateMerchant(m) {
+    return m && m.startsWith("0x") && m.length >= 40;
   }
 
   // Recent payments local (frontend-only)
@@ -311,11 +315,44 @@ function initPOSPage() {
 
   renderRecent();
 
-  // Buttons
+  // STATIC QR (ONE TIME FOREVER)
+  $("btnStaticQR")?.addEventListener("click", () => {
+    const merchant = getMerchant();
+    const chainId = Number(chainSel.value);
+    const tokenKey = tokenSel.value;
+
+    if (!validateMerchant(merchant)) {
+      setStatus("bad", "Enter a valid merchant wallet (0x...). No wallet connection needed.");
+      return;
+    }
+
+    try {
+      ensureChainAndToken(chainId, tokenKey);
+    } catch (e) {
+      setStatus("bad", e.message);
+      return;
+    }
+
+    const link = buildPOSPayLink({
+      merchant,
+      amount: 0,
+      tokenKey,
+      chainId,
+      memo: "",
+      staticOnly: true
+    });
+
+    setPOSHeader("", tokenKey, chainId);
+    setText("posPayLink", link);
+    renderQR(link);
+    setStatus("good", "Static QR ready ✅ (1 QR forever). Customer will enter amount in wallet.");
+  });
+
+  // DYNAMIC QR (PER SALE AMOUNT)
   $("btnGenerateQR")?.addEventListener("click", () => {
-    if (!merchantWallet) {
-      setStatus("warn", "Connect wallet first.");
-      openModal();
+    const merchant = getMerchant();
+    if (!validateMerchant(merchant)) {
+      setStatus("bad", "Enter your merchant wallet (0x...) first. No wallet connection needed.");
       return;
     }
 
@@ -337,17 +374,17 @@ function initPOSPage() {
     }
 
     const link = buildPOSPayLink({
-      merchant: merchantWallet,
+      merchant,
       amount,
       tokenKey,
       chainId,
-      memo
+      memo,
+      staticOnly: false
     });
 
     setPOSHeader(amount, tokenKey, chainId);
     setText("posPayLink", link);
     renderQR(link);
-
     setStatus("good", "QR ready ✅ Customer can scan and pay.");
   });
 
@@ -393,145 +430,8 @@ function initPOSPage() {
 
   // initial header
   setPOSHeader("", tokenSel.value, Number(chainSel.value));
+  setStatus("good", "POS ready ✅ Enter merchant wallet to generate QR.");
 
-  return true;
-}
-
-/* ---------------------------- CREATE LINK PAGE ---------------------------- */
-
-function initCreateLinkPage() {
-  if (!$("generateLinkBtn")) return false;
-
-  // Fill header/footer bits
-  setText("appName", APP_NAME);
-  setText("year", String(new Date().getFullYear()));
-
-  // Defaults
-  const tokenSel = $("token");
-  const chainSel = $("network");
-  const expiresSel = $("expires");
-  const merchantInput = $("merchant");
-  const amountInput = $("amount");
-  const memoInput = $("memo");
-
-  const chainOptions = Object.entries(CHAINS).map(([id, c]) => ({ value: id, label: c.name }));
-  buildSelectOptions(chainSel, chainOptions, DEFAULT_CHAIN_ID);
-
-  const tokenOptions = Object.keys(TOKENS).map((k) => ({ value: k, label: k }));
-  buildSelectOptions(tokenSel, tokenOptions, DEFAULT_TOKEN);
-
-  buildSelectOptions(
-    expiresSel,
-    [
-      { value: "15", label: "15 minutes" },
-      { value: "30", label: "30 minutes" },
-      { value: "60", label: "1 hour" },
-      { value: "240", label: "4 hours" },
-      { value: "1440", label: "24 hours" },
-    ],
-    "15"
-  );
-
-  function updatePreview() {
-    const amount = amountInput.value || "";
-    const tokenKey = tokenSel.value || DEFAULT_TOKEN;
-    const chainId = Number(chainSel.value || DEFAULT_CHAIN_ID);
-    const expiresMin = Number(expiresSel.value || 15);
-
-    const { fee, total } = calcFee(amount);
-    const chainName = CHAINS[chainId]?.name || "—";
-
-    setText("pvAmount", `$${fmtMoney(amount)}`);
-    setText("pvToken", tokenKey);
-    setText("pvNetwork", chainName);
-    setText("pvStatus", "Pending");
-    setText("pvExpires", `${expiresMin}m`);
-    setText("pvFee", `$${fmtMoney(fee)}`);
-    setText("pvTotal", `$${fmtMoney(total)}`);
-  }
-
-  ["input", "change"].forEach((ev) => {
-    tokenSel.addEventListener(ev, updatePreview);
-    chainSel.addEventListener(ev, updatePreview);
-    expiresSel.addEventListener(ev, updatePreview);
-    amountInput.addEventListener(ev, updatePreview);
-    memoInput.addEventListener(ev, updatePreview);
-    merchantInput.addEventListener(ev, updatePreview);
-  });
-
-  $("generateLinkBtn").addEventListener("click", () => {
-    const amount = Number(amountInput.value);
-    const merchant = (merchantInput.value || "").trim();
-    const memo = (memoInput.value || "").trim();
-    const tokenKey = tokenSel.value || DEFAULT_TOKEN;
-    const chainId = Number(chainSel.value || DEFAULT_CHAIN_ID);
-    const expiresMin = Number(expiresSel.value || 15);
-
-    if (!Number.isFinite(amount) || amount <= 0) {
-      setStatus("bad", "Enter a valid amount.");
-      return;
-    }
-    if (!merchant || !merchant.startsWith("0x") || merchant.length < 40) {
-      setStatus("bad", "Enter a valid merchant wallet (0x...).");
-      return;
-    }
-    try {
-      ensureChainAndToken(chainId, tokenKey);
-    } catch (e) {
-      setStatus("bad", e.message);
-      return;
-    }
-
-    const id = rndId();
-    const createdAt = nowIso();
-    const expiresAt = new Date(Date.now() + expiresMin * 60_000).toISOString();
-
-    const receipt = {
-      id,
-      merchant,
-      amount,
-      token: tokenKey,
-      chainId,
-      memo,
-      createdAt,
-      expiresAt,
-      status: "pending",
-      payments: [],
-    };
-
-    upsertReceipt(receipt);
-
-    const base = `${window.location.origin}${window.location.pathname.replace(/[^/]+$/, "")}`;
-    const qs = new URLSearchParams();
-    qs.set("merchant", merchant);
-    qs.set("amount", String(amount));
-    qs.set("token", tokenKey);
-    qs.set("chainId", String(chainId));
-    if (memo) qs.set("memo", memo);
-    qs.set("expiresAt", expiresAt);
-    qs.set("rid", id);
-    const link = `${base}pay.html?${qs.toString()}`;
-    $("shareLink").value = link;
-    setText("ridLabel", id);
-
-    setStatus("good", "Link generated ✅ (works on any device).");
-  });
-
-  $("copyLinkBtn").addEventListener("click", async () => {
-    const v = $("shareLink").value;
-    if (!v) return;
-    await navigator.clipboard.writeText(v);
-    setStatus("good", "Copied link.");
-  });
-
-  $("openPayBtn").addEventListener("click", () => {
-    const v = $("shareLink").value;
-    if (!v) return;
-    window.open(v, "_blank");
-  });
-
-  updatePreview();
-  setStatus("good", "Ready. Share the link on WhatsApp/Telegram.");
   return true;
 }
 
