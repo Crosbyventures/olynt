@@ -2,167 +2,86 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Olynt — Merchant POS</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Olynt — POS</title>
   <link rel="stylesheet" href="./styles.css" />
+
+  <!-- QR -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+  <!-- Ethers v6 (used in pay page only, but safe to include) -->
+  <script type="module" src="./app.js"></script>
 </head>
 
 <body>
-  <div class="container">
-    <div class="topbar">
+  <div class="wrap">
+    <div class="nav">
       <div class="brand">
-        <img src="./olynt-logo.png" alt="Olynt" class="logo-img" />
+        <div class="logoBox">▦</div>
         <div>
-          <h1 id="landingTitle">Olynt Pay</h1>
-          <p>Merchant POS • USDC/USDT • Ethereum / Base / OP / Arbitrum / Polygon / BSC • 2% fee on top</p>
+          <div style="font-weight:900">Olynt</div>
+          <div class="small">POS — generate QR without wallet connect</div>
         </div>
       </div>
-
-      <div class="nav">
+      <div class="pills">
         <a class="pill active" href="./index.html">POS</a>
         <a class="pill" href="./create-link.html">Create Link</a>
         <a class="pill" href="./pay.html">Pay</a>
-
-        <button class="pill" id="btnOpenWalletModal" type="button">Connect</button>
-        <span class="pill" id="walletPill" style="display:none;">Not connected</span>
       </div>
     </div>
 
-    <!-- POS MAIN -->
-    <div class="card">
-      <h2>New Sale</h2>
+    <div id="status" class="status ok">Ready.</div>
 
-      <div class="pos-grid">
-        <!-- LEFT: inputs -->
-        <div>
-          <label class="pos-label">Merchant Wallet (your address)</label>
-          <input id="posMerchant" class="pos-input" placeholder="0x..." />
+    <div class="grid">
+      <div class="card">
+        <h2 style="margin:0 0 10px">Merchant QR</h2>
 
-          <div class="actions" style="margin-top:10px;">
-            <button class="btn" id="btnUseConnected" type="button">Use Connected Wallet</button>
-            <button class="btn" id="btnStaticQR" type="button">Generate My QR (Forever)</button>
+        <label>Merchant wallet (your address)</label>
+        <input id="posMerchant" placeholder="0x..." autocomplete="off" />
+
+        <div class="row">
+          <div>
+            <label>Network</label>
+            <select id="posChain"></select>
           </div>
-
-          <div style="height:12px;"></div>
-
-          <label class="pos-label">Amount (optional for static QR)</label>
-          <input id="posAmount" class="pos-input" inputmode="decimal" placeholder="25.00" />
-
-          <div class="pos-row">
-            <div>
-              <label class="pos-label">Network</label>
-              <select id="posChain" class="pos-input"></select>
-            </div>
-            <div>
-              <label class="pos-label">Token</label>
-              <select id="posToken" class="pos-input"></select>
-            </div>
+          <div>
+            <label>Token</label>
+            <select id="posToken"></select>
           </div>
+        </div>
 
-          <label class="pos-label">Memo (optional)</label>
-          <input id="posMemo" class="pos-input" placeholder="Order #12 / Coffee" />
+        <label>Amount (optional for Static QR)</label>
+        <input id="posAmount" inputmode="decimal" placeholder="25.00" />
 
+        <label>Memo (optional)</label>
+        <input id="posMemo" placeholder="Order #12 / Coffee" />
+
+        <div class="actions">
+          <button class="btn" id="btnStaticQR" type="button">Static QR (Forever)</button>
+          <button class="btn primary" id="btnDynamicQR" type="button">QR With Amount</button>
+          <button class="btn" id="btnReset" type="button">Reset</button>
+        </div>
+
+        <div class="small" style="margin-top:10px">
+          Static QR = customer scans and types amount on Pay page.<br/>
+          Dynamic QR = amount included in the link.
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 style="margin:0 0 10px">QR Preview</h2>
+        <div class="qrbox">
+          <div id="qr"></div>
+          <div class="small">Payment link</div>
+          <code id="payLink">—</code>
           <div class="actions">
-            <button class="btn primary" id="btnGenerateQR" type="button">Generate QR</button>
-            <button class="btn" id="btnNewSale" type="button">New</button>
-          </div>
-
-          <p class="hint">
-            ✅ Merchant can generate QR without connecting wallet.<br/>
-            - <b>Static QR</b>: 1 QR forever (customer enters amount in wallet).<br/>
-            - <b>Dynamic QR</b>: amount included in QR (best for POS checkout).
-          </p>
-
-          <!-- Optional status box (app.js will use it if present) -->
-          <div id="status" class="status good">POS ready.</div>
-        </div>
-
-        <!-- RIGHT: QR -->
-        <div class="pos-screen">
-          <div class="pos-line">
-            <div class="pos-amount" id="posDisplayAmount">$0.00</div>
-            <div class="pos-sub" id="posDisplaySub">Waiting…</div>
-          </div>
-
-          <div class="pos-qr" id="qrBox">
-            <div class="pos-qr-placeholder">QR will appear here</div>
-          </div>
-
-          <div class="pos-link">
-            <div class="muted" style="margin-bottom:6px;">Payment link</div>
-            <div id="posPayLink" class="mono small" style="word-break:break-all;">—</div>
-            <div class="actions" style="margin-top:10px;">
-              <button class="btn" id="btnCopyPayLink" type="button">Copy Link</button>
-            </div>
-          </div>
-
-          <hr style="border:none;border-top:1px solid rgba(255,255,255,.08);margin:14px 0;" />
-
-          <label class="pos-label">Verify payment (paste tx hash)</label>
-          <input id="posTxHash" class="pos-input" placeholder="0x..." />
-          <div class="actions">
-            <button class="btn" id="btnSavePayment" type="button">Save Payment</button>
+            <button class="btn" id="btnCopy" type="button">Copy Link</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- RECENT -->
-    <div class="card">
-      <h2>Recent Payments (Saved)</h2>
-      <div id="recentPayments" class="muted">No payments saved yet.</div>
-      <p class="hint">Frontend-only MVP: saved locally on this device.</p>
-    </div>
-
-    <div class="footer">
-      ©️ <span id="year"></span> Olynt
-    </div>
+    <div class="small" style="text-align:center;margin-top:14px;opacity:.8">© 2026 Olynt</div>
   </div>
-
-  <!-- QR lib -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-
-  <!-- keep your app.js -->
-  <script type="module" src="./app.js"></script>
-
-  <!-- Wallet Modal -->
-  <div class="modal-backdrop" id="walletModalBackdrop" aria-hidden="true">
-    <div class="modal" id="walletModal" role="dialog" aria-modal="true" aria-label="Connect wallet">
-      <div class="modal-header">
-        <div class="modal-title">
-          <div class="eyebrow">CONNECT WALLET</div>
-          <h3 class="h">Choose a wallet.</h3>
-        </div>
-        <button class="modal-close" id="walletModalClose" aria-label="Close">×</button>
-      </div>
-      <div class="modal-body">
-        <div class="wallet-grid">
-          <div class="wallet-card" data-wallet="injected">
-            <div class="wallet-name">MetaMask</div>
-            <p class="wallet-desc">Browser wallet for Base/BSC/Polygon.</p>
-          </div>
-          <div class="wallet-card" data-wallet="walletconnect">
-            <div class="wallet-name">WalletConnect</div>
-            <p class="wallet-desc">Connect mobile wallets via QR.</p>
-          </div>
-          <div class="wallet-card" data-wallet="coinbase">
-            <div class="wallet-name">Coinbase Wallet</div>
-            <p class="wallet-desc">Simple stablecoin payments.</p>
-          </div>
-          <div class="wallet-card" data-wallet="trust">
-            <div class="wallet-name">Trust Wallet</div>
-            <p class="wallet-desc">Popular in many communities.</p>
-          </div>
-        </div>
-        <div class="modal-note" id="walletModalNote">
-          Tip: Mobile wallets use WalletConnect. If WalletConnect is not configured yet, set <code>WALLETCONNECT_PROJECT_ID</code> in <code>config.js</code>.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
 </body>
 </html>
