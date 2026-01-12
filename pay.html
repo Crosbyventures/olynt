@@ -2,101 +2,87 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Olynt — Pay</title>
   <link rel="stylesheet" href="./styles.css" />
+
+  <!-- Ethers v6 -->
+  <script type="module">
+    import "./app.js";
+  </script>
 </head>
 
 <body>
-  <div class="container">
-    <div class="topbar">
+  <div class="wrap">
+    <div class="nav">
       <div class="brand">
-        <img src="./olynt-logo.png" alt="Olynt" class="logo-img" />
+        <div class="logoBox">▦</div>
         <div>
-          <h1>Olynt</h1>
-          <p>Pay with USDC or USDT • 2% fee on top</p>
+          <div style="font-weight:900">Olynt</div>
+          <div class="small">Customer checkout</div>
         </div>
       </div>
-
-      <div class="nav">
+      <div class="pills">
         <a class="pill" href="./index.html">POS</a>
         <a class="pill" href="./create-link.html">Create Link</a>
         <a class="pill active" href="./pay.html">Pay</a>
       </div>
     </div>
 
-    <!-- STATUS -->
-    <div id="status" class="status good" style="margin-bottom:12px;">Loading…</div>
+    <div id="status" class="status ok">Ready to pay.</div>
 
-    <!-- OPEN IN WALLET (shows when NOT inside wallet browser) -->
-    <div id="openInWalletBox" class="card" style="display:none;">
-      <h2 style="margin-top:0;">Open in Wallet to Pay</h2>
-      <p class="muted" style="margin-top:6px;">
-        You opened this payment link in a normal browser. To connect your wallet and pay, open it in a wallet browser.
-      </p>
+    <div class="card">
+      <h2 style="margin:0 0 10px">Payment</h2>
 
-      <div class="actions" style="gap:10px;flex-wrap:wrap;margin-top:14px;">
-        <a class="btn primary" id="openMetaMask" href="#" target="_blank" rel="noopener">Open in MetaMask</a>
-        <a class="btn" id="openCoinbase" href="#" target="_blank" rel="noopener">Open in Coinbase</a>
-        <a class="btn" id="openTrust" href="#" target="_blank" rel="noopener">Open in Trust</a>
-        <button class="btn" id="copyLinkBtn2" type="button">Copy Link</button>
+      <div class="kv">
+        <div class="small">Merchant</div><div><code id="pMerchant">—</code></div>
+        <div class="small">Network</div><div><b id="pNetwork">—</b></div>
+        <div class="small">Token</div><div><b id="pToken">—</b></div>
+        <div class="small">Amount</div><div><b id="pAmount">—</b></div>
+        <div class="small">Fee (2%)</div><div><b id="pFee">—</b></div>
+        <div class="small">Total</div><div><b id="pTotal">—</b></div>
+        <div class="small">Memo</div><div><code id="pMemo">—</code></div>
       </div>
 
-      <p class="hint" style="margin-top:12px;">
-        If buttons don’t work: Open MetaMask → Browser → paste the copied link.
-      </p>
-    </div>
+      <hr/>
 
-    <!-- PAY UI (shows when wallet exists) -->
-    <div id="payUi" class="card" style="display:none;">
-      <h2 style="margin-top:0;">Payment</h2>
-
-      <div class="mono small" style="line-height:1.8;">
-        <div><span class="muted">Receipt</span><br><b id="rid">—</b></div>
-        <div style="margin-top:10px;"><span class="muted">Merchant</span><br><b id="merchantPreview">—</b></div>
-        <div style="margin-top:10px;"><span class="muted">Memo</span><br><b id="memoPreview">—</b></div>
-
-        <div style="margin-top:10px;"><span class="muted">Network</span><br><b id="networkPreview">—</b></div>
-        <div style="margin-top:10px;"><span class="muted">Token</span><br><b id="tokenPreview">—</b></div>
-        <div style="margin-top:10px;"><span class="muted">Amount</span><br><b id="amountPreview">—</b></div>
-
-        <div style="margin-top:10px;"><span class="muted">Fee (2%)</span><br><b id="feePreview">—</b></div>
-        <div style="margin-top:10px;"><span class="muted">Total</span><br><b id="totalPreview">—</b></div>
-
-        <div style="margin-top:10px;"><span class="muted">Expires</span><br><b id="expiresPreview">—</b></div>
+      <div id="staticAmountBox" style="display:none">
+        <label>Enter amount (Static QR)</label>
+        <input id="pAmountInput" inputmode="decimal" placeholder="25.00" />
       </div>
 
-      <div class="actions" style="margin-top:16px;gap:10px;flex-wrap:wrap;">
-        <button class="btn" id="connectBtn" type="button">Connect Wallet</button>
-        <button class="btn primary" id="payBtn" type="button">Pay Now</button>
+      <div class="actions">
+        <button class="btn" id="btnConnect" type="button">Connect Wallet</button>
+        <button class="btn primary" id="btnPay" type="button">Pay Now</button>
       </div>
 
-      <div class="mono small" style="margin-top:12px;">
-        <div><span class="muted">Wallet:</span> <b id="wallet">—</b></div>
-        <div><span class="muted">Network:</span> <b id="walletChain">—</b></div>
+      <div id="walletRow" class="small" style="margin-top:10px">
+        Wallet: <b id="walletAddr">—</b> • Network: <b id="walletNet">—</b>
       </div>
 
-      <div id="txBox" class="card hidden" style="margin-top:16px;">
-        <h3 style="margin-top:0;">Receipt</h3>
-        <div class="mono small" style="line-height:1.6;">
-          <div>Merchant TX: <a id="txMerchant" href="#" target="_blank" rel="noopener">View</a></div>
-          <div>Fee TX: <a id="txFee" href="#" target="_blank" rel="noopener">View</a></div>
+      <div id="openWalletBox" style="display:none;margin-top:12px">
+        <div class="status warn">
+          No wallet injected (Safari/normal browser). Tap a button to open this checkout inside a wallet browser:
+          <div class="actions" style="margin-top:10px">
+            <a class="btn" id="openMM" href="#">Open in MetaMask</a>
+            <a class="btn" id="openCB" href="#">Open in Coinbase Wallet</a>
+            <a class="btn" id="openTW" href="#">Open in Trust Wallet</a>
+          </div>
+          <div class="small" style="margin-top:8px">If your wallet blocks it, copy the URL and paste inside the wallet browser.</div>
         </div>
       </div>
 
-      <div class="card" style="margin-top:16px;">
-        <h3 style="margin-top:0;">Note</h3>
-        <p class="muted">
-          This is a non-custodial payment link. Customer pays the merchant directly on-chain.
-          The receipt is the transaction hash (viewable on the block explorer).
-        </p>
-        <p class="muted">Treasury wallet (fees): <span class="mono small" id="treasuryPreview">—</span></p>
+      <div id="receiptBox" style="display:none;margin-top:12px" class="status ok">
+        Receipt (tx hash): <code id="txHash">—</code><br/>
+        Explorer: <a id="txLink" class="btn" href="#" target="_blank" rel="noreferrer">View</a>
+      </div>
+
+      <div class="small" style="margin-top:12px">
+        Non-custodial: customer pays merchant directly on-chain. Fees go to treasury: <code>0x1a60…b172</code>
       </div>
     </div>
 
-    <div class="footer">©️ <span id="year"></span> Olynt</div>
+    <div class="small" style="text-align:center;margin-top:14px;opacity:.8">© 2026 Olynt</div>
   </div>
-
-  <script type="module" src="./app.js"></script>
 </body>
 </html>
