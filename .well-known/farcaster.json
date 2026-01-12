@@ -1,11 +1,10 @@
 {
   "version": "1",
   "name": "Olynt Pay",
-  "description": "Onchain USDC payments and POS for merchants on Base.",
-  "iconUrl": "https://olyntpay.com/icon-512.png",
+  "iconUrl": "https://olyntpay.com/icon-1024.png",
   "homeUrl": "https://olyntpay.com",
-  "splashImageUrl": "https://olyntpay.com/icon-512.png",
+  "splashImageUrl": "https://olyntpay.com/splash-200.png",
   "splashBackgroundColor": "#000000",
   "primaryCategory": "finance",
-  "tags": ["payments", "usdc", "pos", "base"]
+  "tags": ["payments", "usdc", "pos", "base", "web3"]
 }
