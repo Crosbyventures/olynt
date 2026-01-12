@@ -1,332 +1,46 @@
 :root{
-  /* Olynt dark + orange theme */
-  --bg:#0c0f16;
-  --card:#121a25;
-  --card2:#0f1620;
-  --text:#ece5d6;
-  --muted:#a8b0bf;
-  --border:#2a2f3a;
-
-  --good:#22c55e;
-  --warn:#f59e0b;
-  --bad:#ef4444;
-
-  --btn:#1b2431;
-  --btnHover:#233044;
-
-  --accent:#f59e0b;
-  --accent2:#ffb020;
-  --shadow: rgba(0,0,0,0.35);
+  --bg:#0b1220;
+  --card:rgba(255,255,255,.04);
+  --border:rgba(255,255,255,.10);
+  --text:#e5e7eb;
+  --muted:#94a3b8;
+  --gold:#f59e0b;
+  --gold2:#d97706;
+  --ok:rgba(34,197,94,.35);
+  --warn:rgba(245,158,11,.35);
+  --err:rgba(239,68,68,.35);
 }
 
-*{ box-sizing:border-box; }
-html,body{ height:100%; }
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text)}
+.wrap{max-width:980px;margin:0 auto;padding:18px}
+.nav{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:16px}
+.brand{display:flex;gap:10px;align-items:center}
+.logoBox{width:34px;height:34px;border-radius:10px;background:rgba(245,158,11,.14);display:grid;place-items:center;border:1px solid rgba(245,158,11,.25)}
+.small{color:var(--muted);font-size:13px}
+.pills{display:flex;gap:10px;flex-wrap:wrap}
+.pill{padding:10px 14px;border:1px solid rgba(255,255,255,.12);border-radius:999px;color:var(--text);text-decoration:none}
+.pill.active{border-color:rgba(245,158,11,.6);box-shadow:0 0 0 2px rgba(245,158,11,.15) inset}
 
-body{
-  margin:0;
-  font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-  background:
-    radial-gradient(1200px 800px at 20% 0%, #1a2433 0%, var(--bg) 62%),
-    radial-gradient(900px 700px at 85% 25%, #121a25 0%, var(--bg) 60%);
-  color:var(--text);
-}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
 
-/* ===== LAYOUT ===== */
-.container{
-  max-width:980px;
-  margin:0 auto;
-  padding:28px 16px 40px;
-}
+label{display:block;margin:10px 0 6px;color:#cbd5e1}
+input,select{width:100%;padding:12px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.25);color:var(--text)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
-.topbar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  margin-bottom:18px;
-}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.btn{padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:var(--text);cursor:pointer;text-decoration:none;display:inline-block}
+.btn.primary{background:linear-gradient(180deg,var(--gold),var(--gold2));border-color:transparent;color:#111827;font-weight:800}
+.btn.ghost{background:transparent}
 
-/* ===== BRAND ===== */
-.brand{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
+.status{margin:12px 0;padding:12px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.18)}
+.status.ok{border-color:var(--ok)}
+.status.warn{border-color:var(--warn)}
+.status.err{border-color:var(--err)}
 
-/* ❌ OLD ORANGE SQUARE (DISABLED) */
-.logo{ display:none; }
-
-/* ✅ REAL IMAGE LOGO (32x32) */
-.logo-img{
-  width:32px;
-  height:32px;
-  object-fit:contain;
-  border-radius:8px;
-  filter: drop-shadow(0 0 6px rgba(255,165,0,.45));
-}
-
-.brand h1{
-  font-size:16px;
-  margin:0;
-  letter-spacing:.4px;
-}
-
-.brand p{
-  margin:2px 0 0;
-  color:var(--muted);
-  font-size:12px;
-}
-
-/* ===== NAV ===== */
-.nav{ display:flex; gap:10px; align-items:center; }
-
-.pill{
-  padding:8px 12px;
-  border:1px solid var(--border);
-  border-radius:999px;
-  color:var(--text);
-  text-decoration:none;
-  background:rgba(255,255,255,0.02);
-}
-
-.pill:hover{ border-color:rgba(245,158,11,.5); }
-
-.pill.active{
-  background:linear-gradient(135deg, rgba(245,158,11,.18), rgba(255,122,24,.10));
-  border-color:rgba(245,158,11,.55);
-}
-
-/* ===== GRID ===== */
-.grid{ display:grid; gap:14px; grid-template-columns:1fr; }
-@media (min-width:920px){
-  .grid{ grid-template-columns:1.1fr .9fr; }
-}
-
-/* ===== CARDS ===== */
-.card{
-  background:linear-gradient(180deg, rgba(18,26,37,.92), rgba(15,22,32,.92));
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:16px;
-  box-shadow:0 20px 60px var(--shadow);
-}
-
-.card h2{
-  margin:0 0 10px;
-  font-size:14px;
-  color:#f3f4f6;
-}
-
-/* ===== FORMS ===== */
-label{ font-size:12px; color:var(--muted); }
-
-input, textarea, select{
-  width:100%;
-  border-radius:12px;
-  border:1px solid var(--border);
-  background:rgba(12,15,22,.55);
-  color:var(--text);
-  padding:11px 12px;
-  outline:none;
-}
-
-input:focus, textarea:focus, select:focus{
-  border-color:rgba(245,158,11,.55);
-  box-shadow:0 0 0 3px rgba(245,158,11,.12);
-}
-
-textarea{ min-height:72px; resize:vertical; }
-
-/* ===== BUTTONS ===== */
-.btn{
-  border:1px solid var(--border);
-  background:var(--btn);
-  color:var(--text);
-  padding:11px 14px;
-  border-radius:12px;
-  cursor:pointer;
-  font-weight:700;
-}
-
-.btn:hover{ background:var(--btnHover); }
-
-.btn.primary{
-  background:linear-gradient(135deg, var(--accent), var(--accent2));
-  border:0;
-  color:#101010;
-  box-shadow:0 10px 26px rgba(245,158,11,.18);
-}
-
-.btn.primary:hover{ filter:brightness(1.05); }
-
-/* ===== UTIL ===== */
-.actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
-.hint{ margin-top:10px; color:var(--muted); font-size:12px; line-height:1.4; }
-.footer{ margin-top:16px; color:var(--muted); font-size:12px; text-align:center; }
-.hidden{ display:none !important; }
-
-/* ===== STATUS ===== */
-.status{
-  margin-top:14px;
-  padding:12px 14px;
-  border-radius:14px;
-  border:1px solid var(--border);
-  background:rgba(255,255,255,.02);
-}
-
-.status.good{
-  border-color:rgba(34,197,94,.55);
-  background:rgba(34,197,94,.08);
-}
-.status.warn{
-  border-color:rgba(245,158,11,.55);
-  background:rgba(245,158,11,.08);
-}
-.status.bad{
-  border-color:rgba(239,68,68,.55);
-  background:rgba(239,68,68,.08);
-}
-
-/* ===== WALLET MODAL ===== */
-.modal-backdrop{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.55);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-  z-index:9999;
-}
-.modal-backdrop.show{ display:flex; }
-
-.modal{
-  width:min(860px,100%);
-  border-radius:18px;
-  border:1px solid var(--border);
-  background:linear-gradient(180deg, rgba(18,26,37,.98), rgba(15,22,32,.98));
-  box-shadow:0 30px 90px rgba(0,0,0,.55);
-  overflow:hidden;
-}
-/* =========================
-   POS ADD-ON (index.html)
-   Paste at the bottom
-========================= */
-
-/* POS layout grid */
-.pos-grid{
-  display:grid;
-  gap:14px;
-  grid-template-columns:1fr;
-}
-
-@media (min-width:920px){
-  .pos-grid{
-    grid-template-columns: 1fr 1fr;
-    align-items:start;
-  }
-}
-
-/* Inputs / labels used by POS */
-.pos-label{
-  display:block;
-  margin:10px 0 6px;
-  font-size:12px;
-  color:var(--muted);
-}
-
-.pos-input{
-  width:100%;
-  border-radius:12px;
-  border:1px solid var(--border);
-  background:rgba(12,15,22,.55);
-  color:var(--text);
-  padding:11px 12px;
-  outline:none;
-}
-
-.pos-input:focus{
-  border-color:rgba(245,158,11,.55);
-  box-shadow:0 0 0 3px rgba(245,158,11,.12);
-}
-
-/* Row for Network + Token */
-.pos-row{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-/* POS Screen box (right side) */
-.pos-screen{
-  border:1px solid var(--border);
-  border-radius:16px;
-  background:linear-gradient(180deg, rgba(10,14,20,.65), rgba(10,14,20,.35));
-  padding:14px;
-}
-
-/* Amount line */
-.pos-line{
-  display:flex;
-  align-items:baseline;
-  justify-content:space-between;
-  gap:10px;
-  margin-bottom:10px;
-}
-
-.pos-amount{
-  font-size:22px;
-  font-weight:900;
-  letter-spacing:.2px;
-}
-
-.pos-sub{
-  font-size:12px;
-  color:var(--muted);
-}
-
-/* QR area */
-.pos-qr{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  min-height:280px;
-  border-radius:14px;
-  border:1px dashed rgba(245,158,11,.35);
-  background:rgba(255,255,255,.02);
-  margin:10px 0 12px;
-  overflow:hidden;
-}
-
-.pos-qr-placeholder{
-  color:var(--muted);
-  font-size:12px;
-}
-
-/* If QR library renders an <img> or <canvas> */
-.pos-qr img,
-.pos-qr canvas{
-  max-width:260px;
-  max-height:260px;
-  border-radius:10px;
-}
-
-/* Pay link box */
-.pos-link{
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:10px 12px;
-  background:rgba(255,255,255,.02);
-}
-
-/* Recent payments list area (simple) */
-#recentPayments{
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:12px;
-  background:rgba(255,255,255,.02);
-}
-
-/* Small monospace utility */
-.mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
-.small{ font-size:12px; }
+.qrbox{display:flex;flex-direction:column;gap:10px;align-items:center;justify-content:center;min-height:300px}
+.kv{display:grid;grid-template-columns:120px 1fr;gap:8px;margin-top:10px}
+code{word-break:break-all}
+hr{border:none;border-top:1px solid rgba(255,255,255,.08);margin:14px 0}
