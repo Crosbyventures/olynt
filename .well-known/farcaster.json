@@ -1,10 +1,17 @@
 {
-  "version": "1",
-  "name": "Olynt Pay",
-  "iconUrl": "https://olyntpay.com/icon-1024.png",
-  "homeUrl": "https://olyntpay.com",
-  "splashImageUrl": "https://olyntpay.com/splash-200.png",
-  "splashBackgroundColor": "#000000",
-  "primaryCategory": "finance",
-  "tags": ["payments", "usdc", "pos", "base", "web3"]
+  "accountAssociation": {
+    "header": "eyJmaWQiOjE5NjUzMjYsInR5cGUiOiJhdXRoIiwia2V5IjoiMHg0QWZBNWI5M0E5OTcwQzRjZDc5MDFmZGZjM2UxMjExNTgxRWZFZTgyIn0",
+    "payload": "eyJkb21haW4iOiJvbHludHBheS5jb20ifQ",
+    "signature": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABjs54xwxqJjhdsDOPnz4iMc1KIhc8hP1VA35jE95u7XRqV5SPpxkSl1J4L2On4KXlAfVLcLwTm5hSJ-Qs0-srhQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAl8ZgIay2xclZzG8RWZzuWvO8j9R0fus3XxDee9lRlVy8dAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACKeyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiRmc2RUFIN0lXQzZxVzNRYWNUZF9ybWFMdkMwZG9fMVhEdC1kVVRUMzE3VSIsIm9yaWdpbiI6Imh0dHBzOi8va2V5cy5jb2luYmFzZS5jb20iLCJjcm9zc09yaWdpbiI6ZmFsc2V9AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  "miniapp": {
+    "version": "1",
+    "name": "Olynt Pay",
+    "iconUrl": "https://olyntpay.com/icon-1024.png",
+    "homeUrl": "https://olyntpay.com",
+    "splashImageUrl": "https://olyntpay.com/splash-200.png",
+    "splashBackgroundColor": "#000000",
+    "primaryCategory": "finance",
+    "tags": ["payments", "crypto", "pos"]
+  }
 }
