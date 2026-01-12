@@ -1,0 +1,15 @@
+{
+  "accountAssociation": {
+    "header": "",
+    "payload": "",
+    "signature": ""
+  },
+  "frame": {
+    "version": "next",
+    "name": "Olynt Pay",
+    "homeUrl": "https://olyntpay.com",
+    "iconUrl": "https://olyntpay.com/icon-192.png",
+    "splashImageUrl": "https://olyntpay.com/icon-512.png",
+    "splashBackgroundColor": "#000000"
+  }
+}
