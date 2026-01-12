@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Olynt — Pay</title>
   <link rel="stylesheet" href="./styles.css" />
 </head>
+
 <body>
   <div class="container">
     <div class="topbar">
@@ -13,9 +14,10 @@
         <img src="./olynt-logo.png" alt="Olynt" class="logo-img" />
         <div>
           <h1 id="appName">Olynt</h1>
-          <p>Pay with USDC or USDT • 2% fee on top</p>
+          <p>Pay with USDC/USDT • 2% fee on top</p>
         </div>
       </div>
+
       <div class="nav">
         <a class="pill" href="./index.html">Home</a>
         <a class="pill" href="./create-link.html">Create Link</a>
@@ -23,93 +25,119 @@
       </div>
     </div>
 
-    <div class="grid2">
-      <div class="card">
-        <h2>Payment</h2>
-        <div class="receiptBox">
-          <div class="receiptRow"><div class="muted">Receipt</div><div id="rid" class="mono">—</div></div>
-          <div class="receiptRow"><div class="muted">Merchant</div><div id="merchantPreview" class="mono">—</div></div>
-          <div class="receiptRow"><div class="muted">Memo</div><div id="memoPreview">—</div></div>
-          <div class="receiptRow"><div class="muted">Network</div><div id="networkPreview">—</div></div>
-          <div class="receiptRow"><div class="muted">Token</div><div id="tokenPreview">—</div></div>
-          <div class="receiptRow"><div class="muted">Amount</div><div id="amountPreview">—</div></div>
-          <div class="receiptRow"><div class="muted">Fee (2%)</div><div id="feePreview">—</div></div>
-          <div class="receiptRow"><div class="muted">Total</div><div id="totalPreview">—</div></div>
-          <div class="receiptRow"><div class="muted">Expires</div><div id="expiresPreview">—</div></div>
+    <!-- STATUS -->
+    <div id="status" class="status warn" style="margin-top:12px;">Loading…</div>
+
+    <!-- MAIN PAY CARD -->
+    <div class="card" style="margin-top:14px;">
+      <h2 style="margin-top:0;">Payment</h2>
+
+      <div class="pos-grid" style="align-items:start;">
+        <div>
+          <div class="muted">Receipt</div>
+          <div class="mono" id="rid">—</div>
+
+          <div style="height:12px;"></div>
+
+          <div class="muted">Merchant</div>
+          <div class="mono" id="merchantPreview">—</div>
+
+          <div style="height:12px;"></div>
+
+          <div class="muted">Memo</div>
+          <div class="mono" id="memoPreview">—</div>
+
+          <div style="height:12px;"></div>
+
+          <div class="muted">Network</div>
+          <div class="mono" id="networkPreview">—</div>
+
+          <div style="height:12px;"></div>
+
+          <div class="muted">Token</div>
+          <div class="mono" id="tokenPreview">—</div>
+
+          <div style="height:12px;"></div>
+
+          <div class="muted">Amount</div>
+          <div class="mono" id="amountPreview">—</div>
+
+          <div style="height:12px;"></div>
+
+          <div class="muted">Fee (2%)</div>
+          <div class="mono" id="feePreview">—</div>
+
+          <div style="height:12px;"></div>
+
+          <div class="muted">Total</div>
+          <div class="mono" id="totalPreview">—</div>
+
+          <div style="height:12px;"></div>
+
+          <div class="muted">Expires</div>
+          <div class="mono" id="expiresPreview">—</div>
+
+          <div style="height:16px;"></div>
+
+          <div class="actions" style="gap:10px; flex-wrap:wrap;">
+            <button class="btn" id="connectBtn" type="button">Connect Wallet</button>
+            <button class="btn primary" id="payBtn" type="button">Pay Now</button>
+          </div>
+
+          <div style="height:12px;"></div>
+
+          <div class="muted">Wallet: <span class="mono" id="wallet">—</span></div>
+          <div class="muted">Network: <span class="mono" id="walletChain">—</span></div>
+
+          <!-- TX BOX -->
+          <div id="txBox" class="card hidden" style="margin-top:14px;">
+            <div><b>Transactions</b></div>
+            <div style="height:10px;"></div>
+            <div class="mono small">
+              Merchant: <a id="txMerchant" href="#" target="_blank" rel="noopener">view</a>
+            </div>
+            <div class="mono small" style="margin-top:6px;">
+              Fee: <a id="txFee" href="#" target="_blank" rel="noopener">view</a>
+            </div>
+          </div>
         </div>
 
-        <div class="actions">
-          <button id="connectBtn" class="btn">Connect Wallet</button>
-          <button id="payBtn" class="btn primary">Pay Now</button>
+        <div>
+          <div class="card">
+            <div class="muted">Note</div>
+            <p class="hint" style="margin-top:10px;">
+              Customer pays merchant directly on-chain.
+              The receipt is the transaction hash.
+            </p>
+          </div>
+
+          <!-- Open in Wallet Box (shows ONLY if user is not inside a wallet browser) -->
+          <div id="openInWalletBox" class="card" style="margin-top:14px; display:none;">
+            <h3 style="margin:0 0 10px 0;">Open in a Wallet</h3>
+            <p class="muted" style="margin:0 0 12px 0;">
+              You opened this link in a normal browser. To pay, open it in a wallet browser.
+            </p>
+
+            <div class="actions" style="gap:10px;flex-wrap:wrap;">
+              <a class="btn" id="openMetaMask" href="#" target="_blank" rel="noopener">Open in MetaMask</a>
+              <a class="btn" id="openTrust" href="#" target="_blank" rel="noopener">Open in Trust</a>
+              <a class="btn" id="openCoinbase" href="#" target="_blank" rel="noopener">Open in Coinbase</a>
+              <button class="btn" id="copyPayLink2" type="button">Copy Link</button>
+            </div>
+
+            <p class="hint" style="margin-top:12px;">
+              If you already have MetaMask: open MetaMask → Browser → paste link.
+            </p>
+          </div>
         </div>
-
-        <div class="walletBox">
-          <div><span class="muted">Wallet:</span> <span id="wallet" class="mono">—</span></div>
-          <div><span class="muted">Network:</span> <span id="walletChain">—</span></div>
-        </div>
-
-        <div id="txBox" class="card nested hidden">
-          <h3>Transactions</h3>
-          <p class="muted">Two on-chain transfers will be created (merchant + fee).</p>
-          <div class="receiptRow"><div class="muted">Merchant</div><a id="txMerchant" target="_blank" rel="noreferrer">View</a></div>
-          <div class="receiptRow"><div class="muted">Fee</div><a id="txFee" target="_blank" rel="noreferrer">View</a></div>
-        </div>
-
-        <div id="status" class="status warn">—</div>
-      </div>
-
-      <div class="card">
-        <h2>Note</h2>
-        <p class="muted">
-          This is a non-custodial payment link. The customer pays the merchant directly on-chain. Your receipt is the transaction hash (and it can be viewed on the block explorer).
-        </p>
-        <p class="muted">
-          Treasury wallet (fees): <span class="mono">0x1a60…b172</span>
-        </p>
       </div>
     </div>
 
     <div class="footer">
-      © <span id="year"></span> Olynt
+      ©️ <span id="year"></span> Olynt
     </div>
   </div>
 
   <script type="module" src="./app.js"></script>
-<!-- Wallet Modal -->
-<div class="modal-backdrop" id="walletModalBackdrop" aria-hidden="true">
-  <div class="modal" id="walletModal" role="dialog" aria-modal="true" aria-label="Connect wallet">
-    <div class="modal-header">
-      <div class="modal-title">
-        <div class="eyebrow">CONNECT WALLET</div>
-        <h3 class="h">Choose a wallet.</h3>
-      </div>
-      <button class="modal-close" id="walletModalClose" aria-label="Close">×</button>
-    </div>
-    <div class="modal-body">
-      <div class="wallet-grid">
-        <div class="wallet-card" data-wallet="injected">
-          <div class="wallet-name">MetaMask</div>
-          <p class="wallet-desc">Browser wallet for Base/BSC/Polygon.</p>
-        </div>
-        <div class="wallet-card" data-wallet="walletconnect">
-          <div class="wallet-name">WalletConnect</div>
-          <p class="wallet-desc">Connect mobile wallets via QR.</p>
-        </div>
-        <div class="wallet-card" data-wallet="coinbase">
-          <div class="wallet-name">Coinbase Wallet</div>
-          <p class="wallet-desc">Simple stablecoin payments.</p>
-        </div>
-        <div class="wallet-card" data-wallet="trust">
-          <div class="wallet-name">Trust Wallet</div>
-          <p class="wallet-desc">Popular in many communities.</p>
-        </div>
-      </div>
-      <div class="modal-note" id="walletModalNote">
-        Tip: Mobile wallets use WalletConnect. If WalletConnect is not configured yet, set <code>WALLETCONNECT_PROJECT_ID</code> in <code>config.js</code>.
-      </div>
-    </div>
-  </div>
-</div>
-
 </body>
 </html>
