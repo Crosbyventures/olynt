@@ -208,3 +208,125 @@ textarea{ min-height:72px; resize:vertical; }
   box-shadow:0 30px 90px rgba(0,0,0,.55);
   overflow:hidden;
 }
+/* =========================
+   POS ADD-ON (index.html)
+   Paste at the bottom
+========================= */
+
+/* POS layout grid */
+.pos-grid{
+  display:grid;
+  gap:14px;
+  grid-template-columns:1fr;
+}
+
+@media (min-width:920px){
+  .pos-grid{
+    grid-template-columns: 1fr 1fr;
+    align-items:start;
+  }
+}
+
+/* Inputs / labels used by POS */
+.pos-label{
+  display:block;
+  margin:10px 0 6px;
+  font-size:12px;
+  color:var(--muted);
+}
+
+.pos-input{
+  width:100%;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:rgba(12,15,22,.55);
+  color:var(--text);
+  padding:11px 12px;
+  outline:none;
+}
+
+.pos-input:focus{
+  border-color:rgba(245,158,11,.55);
+  box-shadow:0 0 0 3px rgba(245,158,11,.12);
+}
+
+/* Row for Network + Token */
+.pos-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+/* POS Screen box (right side) */
+.pos-screen{
+  border:1px solid var(--border);
+  border-radius:16px;
+  background:linear-gradient(180deg, rgba(10,14,20,.65), rgba(10,14,20,.35));
+  padding:14px;
+}
+
+/* Amount line */
+.pos-line{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.pos-amount{
+  font-size:22px;
+  font-weight:900;
+  letter-spacing:.2px;
+}
+
+.pos-sub{
+  font-size:12px;
+  color:var(--muted);
+}
+
+/* QR area */
+.pos-qr{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:280px;
+  border-radius:14px;
+  border:1px dashed rgba(245,158,11,.35);
+  background:rgba(255,255,255,.02);
+  margin:10px 0 12px;
+  overflow:hidden;
+}
+
+.pos-qr-placeholder{
+  color:var(--muted);
+  font-size:12px;
+}
+
+/* If QR library renders an <img> or <canvas> */
+.pos-qr img,
+.pos-qr canvas{
+  max-width:260px;
+  max-height:260px;
+  border-radius:10px;
+}
+
+/* Pay link box */
+.pos-link{
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:10px 12px;
+  background:rgba(255,255,255,.02);
+}
+
+/* Recent payments list area (simple) */
+#recentPayments{
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:12px;
+  background:rgba(255,255,255,.02);
+}
+
+/* Small monospace utility */
+.mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+.small{ font-size:12px; }
