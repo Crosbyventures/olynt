@@ -14,7 +14,7 @@
         <img src="./olynt-logo.png" alt="Olynt" class="logo-img" />
         <div>
           <h1 id="landingTitle">Olynt Pay</h1>
-          <p>Merchant POS • USDC/USDT • Base / OP / Arbitrum / Polygon / Ethereum / BSC • 2% fee on top</p>
+          <p>Merchant POS • USDC/USDT • Ethereum / Base / OP / Arbitrum / Polygon / BSC • 2% fee on top</p>
         </div>
       </div>
 
@@ -23,7 +23,6 @@
         <a class="pill" href="./create-link.html">Create Link</a>
         <a class="pill" href="./pay.html">Pay</a>
 
-        <!-- Connect button (opens your wallet modal) -->
         <button class="pill" id="btnOpenWalletModal" type="button">Connect</button>
         <span class="pill" id="walletPill" style="display:none;">Not connected</span>
       </div>
@@ -36,19 +35,27 @@
       <div class="pos-grid">
         <!-- LEFT: inputs -->
         <div>
-          <label class="pos-label">Amount</label>
+          <label class="pos-label">Merchant Wallet (your address)</label>
+          <input id="posMerchant" class="pos-input" placeholder="0x..." />
+
+          <div class="actions" style="margin-top:10px;">
+            <button class="btn" id="btnUseConnected" type="button">Use Connected Wallet</button>
+            <button class="btn" id="btnStaticQR" type="button">Generate My QR (Forever)</button>
+          </div>
+
+          <div style="height:12px;"></div>
+
+          <label class="pos-label">Amount (optional for static QR)</label>
           <input id="posAmount" class="pos-input" inputmode="decimal" placeholder="25.00" />
 
           <div class="pos-row">
             <div>
               <label class="pos-label">Network</label>
-              <select id="posChain" class="pos-input">
-              </select>
+              <select id="posChain" class="pos-input"></select>
             </div>
             <div>
               <label class="pos-label">Token</label>
-              <select id="posToken" class="pos-input">
-              </select>
+              <select id="posToken" class="pos-input"></select>
             </div>
           </div>
 
@@ -61,8 +68,13 @@
           </div>
 
           <p class="hint">
-            Customer scans QR → pays → shows receipt (tx hash). Merchant saves tx hash.
+            ✅ Merchant can generate QR without connecting wallet.<br/>
+            - <b>Static QR</b>: 1 QR forever (customer enters amount in wallet).<br/>
+            - <b>Dynamic QR</b>: amount included in QR (best for POS checkout).
           </p>
+
+          <!-- Optional status box (app.js will use it if present) -->
+          <div id="status" class="status good">POS ready.</div>
         </div>
 
         <!-- RIGHT: QR -->
@@ -103,17 +115,17 @@
     </div>
 
     <div class="footer">
-      © <span id="year"></span> Olynt
+      ©️ <span id="year"></span> Olynt
     </div>
   </div>
 
-  <!-- libs (needed for QR + wallet flow later) -->
+  <!-- QR lib -->
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
   <!-- keep your app.js -->
   <script type="module" src="./app.js"></script>
 
-  <!-- Wallet Modal (UNCHANGED) -->
+  <!-- Wallet Modal -->
   <div class="modal-backdrop" id="walletModalBackdrop" aria-hidden="true">
     <div class="modal" id="walletModal" role="dialog" aria-modal="true" aria-label="Connect wallet">
       <div class="modal-header">
