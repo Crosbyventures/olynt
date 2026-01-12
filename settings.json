@@ -1,3 +1,6 @@
 {
-    "liveServer.settings.port": 5502
+  "app": "olynt",
+  "version": "2.0.0",
+  "mode": "frontend-only",
+  "fee_bps": 200
 }
