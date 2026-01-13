@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Olynt Pay — Merchants</title>
+  <meta name="description" content="Merchant information for Olynt Pay stablecoin checkout." />
 
   <style>
     :root{
@@ -14,19 +15,22 @@
       --text:rgba(255,255,255,.92);
       --muted:rgba(255,255,255,.65);
       --gold:#f5c84b;
-      --radius:20px;
-      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      --gold2:#ffdf76;
+      --radius:22px;
+      --shadow:0 18px 60px rgba(0,0,0,.45);
+      --font:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
     }
 
     *{box-sizing:border-box}
     body{
       margin:0;
+      min-height:100vh;
       font-family:var(--font);
       color:var(--text);
       background:
-        radial-gradient(900px 500px at 50% 0%, rgba(245,200,75,.12), transparent 60%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
-      min-height:100vh;
+        radial-gradient(900px 600px at 20% 10%, rgba(111,211,255,.15), transparent 60%),
+        radial-gradient(900px 600px at 80% 90%, rgba(245,200,75,.10), transparent 60%),
+        linear-gradient(180deg,var(--bg0),var(--bg1));
       display:flex;
       align-items:center;
       justify-content:center;
@@ -34,45 +38,59 @@
     }
 
     .card{
-      max-width:520px;
+      max-width:720px;
       width:100%;
       background:var(--card);
       border:1px solid var(--border);
       border-radius:var(--radius);
-      padding:28px;
+      box-shadow:var(--shadow);
+      padding:32px;
       text-align:center;
     }
 
     h1{
-      margin:0 0 10px;
-      font-size:26px;
+      margin:0 0 12px;
+      font-size:32px;
+      letter-spacing:-.4px;
     }
 
     p{
-      margin:0 0 22px;
+      margin:0 0 18px;
       color:var(--muted);
       line-height:1.6;
-      font-size:15px;
+      font-size:15.5px;
+    }
+
+    .pill{
+      display:inline-block;
+      margin:6px 6px 14px;
+      padding:6px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.06);
+      font-size:13px;
     }
 
     .btn{
       display:inline-block;
+      margin-top:16px;
       padding:14px 20px;
       border-radius:14px;
-      background:linear-gradient(180deg,#f5c84b,#e6b93d);
-      color:#1b1405;
-      text-decoration:none;
       font-weight:800;
       font-size:15px;
-      border:none;
+      text-decoration:none;
+      color:#1b1405;
+      background:linear-gradient(180deg,var(--gold2),var(--gold));
+      box-shadow:0 12px 30px rgba(245,200,75,.25);
+      transition:.2s;
     }
 
     .btn:hover{
       transform:translateY(-1px);
     }
 
-    .note{
-      margin-top:18px;
+    .footer{
+      margin-top:22px;
       font-size:12.5px;
       color:rgba(255,255,255,.5);
     }
@@ -82,17 +100,30 @@
 <body>
 
   <div class="card">
-    <h1>Merchant Access</h1>
+    <h1>Olynt Pay — Merchants</h1>
 
     <p>
-      Merchant tools are currently in private beta.<br>
-      Please return to the main POS to continue.
+      Olynt Pay enables non-custodial stablecoin payments using USDC and USDT.
+      Customers pay directly from their wallet and funds settle on-chain to the merchant.
     </p>
 
-    <a class="btn" href="./index.html">⬅ Back to POS</a>
+    <div>
+      <span class="pill">Non-custodial</span>
+      <span class="pill">On-chain receipts</span>
+      <span class="pill">USDC & USDT</span>
+      <span class="pill">Multi-network</span>
+    </div>
 
-    <div class="note">
-      Olynt Pay is non-custodial. Payments go wallet-to-wallet on-chain.
+    <p>
+      Merchant onboarding is currently in private beta.
+      Access is enabled directly from the main app.
+    </p>
+
+    <!-- ONLY SAFE LINK -->
+    <a class="btn" href="./index.html">← Back to Main App</a>
+
+    <div class="footer">
+      © 2026 Olynt Pay
     </div>
   </div>
 
