@@ -1,144 +1,376 @@
-<!-- merchants.html — Olynt Pay (Merchant Page) -->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Olynt Pay — Merchants</title>
-  <link rel="stylesheet" href="./styles.css" />
+  <meta name="description" content="Accept USDC & USDT across multiple networks with QR codes and payment links. Non-custodial." />
+  <link rel="icon" href="/icon-124.png" />
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.08);
+      --stroke: rgba(255,255,255,.10);
+      --text:#EAF0FF;
+      --muted: rgba(234,240,255,.72);
+      --muted2: rgba(234,240,255,.55);
+      --glow: rgba(88,130,255,.22);
+      --glow2: rgba(120,80,255,.16);
+      --btn:#F2B64C;       /* matches your current yellow vibe */
+      --btnText:#0B0E16;
+    }
 
-  <!-- Optional: if you already added manifest support -->
-  <!-- <link rel="manifest" href="/manifest.json"> -->
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(1200px 700px at 20% -10%, var(--glow), transparent 60%),
+        radial-gradient(1000px 600px at 90% 10%, var(--glow2), transparent 55%),
+        linear-gradient(180deg, #05070E 0%, var(--bg) 55%, #05070E 100%);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+
+    a{color:inherit}
+    .wrap{max-width:1080px;margin:0 auto;padding:22px 18px 60px}
+
+    /* top bar */
+    .topbar{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:14px;
+      padding:14px 14px;
+      background: rgba(0,0,0,.25);
+      border:1px solid var(--stroke);
+      border-radius:14px;
+      backdrop-filter: blur(10px);
+    }
+    .brand{display:flex;align-items:center;gap:10px;min-width:0}
+    .brand img{width:28px;height:28px;border-radius:10px}
+    .brand .title{
+      font-weight:700;
+      letter-spacing:.2px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .beta{
+      margin-left:8px;
+      font-size:12px;
+      padding:3px 8px;
+      border-radius:999px;
+      border:1px solid rgba(242,182,76,.35);
+      background: rgba(242,182,76,.12);
+      color: rgba(242,182,76,.95);
+    }
+    .nav{
+      display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;
+      font-size:13px;color:var(--muted);
+    }
+    .nav a{
+      text-decoration:none;
+      padding:8px 10px;
+      border-radius:10px;
+      border:1px solid transparent;
+    }
+    .nav a:hover{
+      border-color: var(--stroke);
+      background: rgba(255,255,255,.05);
+    }
+
+    /* hero */
+    .hero{
+      margin-top:16px;
+      border-radius:18px;
+      border:1px solid var(--stroke);
+      overflow:hidden;
+      position:relative;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.65) 0%, rgba(0,0,0,.55) 35%, rgba(0,0,0,.15) 100%),
+        url("/splash-200.png") center/cover no-repeat;
+      min-height:320px;
+    }
+    .hero::after{
+      content:"";
+      position:absolute;inset:0;
+      background:
+        radial-gradient(700px 380px at 20% 55%, rgba(0,220,255,.10), transparent 60%),
+        radial-gradient(600px 380px at 55% 35%, rgba(160,120,255,.12), transparent 55%),
+        radial-gradient(520px 340px at 85% 60%, rgba(242,182,76,.08), transparent 55%);
+      pointer-events:none;
+    }
+    .heroInner{
+      position:relative;
+      z-index:1;
+      padding:28px 22px;
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:18px;
+      align-items:end;
+    }
+    .hero h1{
+      margin:0 0 10px;
+      font-size:38px;
+      line-height:1.08;
+      letter-spacing:-.3px;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      max-width:54ch;
+      font-size:15px;
+      line-height:1.6;
+    }
+    .pillrow{
+      display:flex;flex-wrap:wrap;gap:10px;
+      margin-top:16px;
+    }
+    .pill{
+      font-size:12px;
+      color:rgba(234,240,255,.86);
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.13);
+      background: rgba(0,0,0,.25);
+      backdrop-filter: blur(6px);
+    }
+
+    .ctaBox{
+      background: rgba(0,0,0,.28);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:16px;
+      padding:16px;
+      backdrop-filter: blur(10px);
+    }
+    .ctaBox .label{font-size:12px;color:var(--muted2);margin-bottom:8px}
+    .ctaBox .big{
+      font-size:14px;color:var(--muted);
+      margin-bottom:12px;line-height:1.5
+    }
+    .btnRow{display:flex;gap:10px;flex-wrap:wrap}
+    .btn{
+      cursor:pointer;
+      border:none;
+      padding:10px 14px;
+      border-radius:12px;
+      font-weight:700;
+      font-size:14px;
+      letter-spacing:.2px;
+    }
+    .btn.primary{
+      background: var(--btn);
+      color: var(--btnText);
+      box-shadow: 0 10px 30px rgba(242,182,76,.15);
+    }
+    .btn.ghost{
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.14);
+      color: var(--text);
+    }
+    .btn.ghost:hover{background: rgba(255,255,255,.09)}
+
+    /* sections */
+    .grid{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:14px;
+    }
+    .card{
+      background: var(--panel);
+      border:1px solid var(--stroke);
+      border-radius:16px;
+      padding:16px;
+      backdrop-filter: blur(10px);
+    }
+    .card h3{margin:0 0 10px;font-size:16px}
+    .card p{margin:0;color:var(--muted);font-size:14px;line-height:1.6}
+    .kpi{
+      display:flex;gap:10px;flex-wrap:wrap;margin-top:12px
+    }
+    .kpi .tag{
+      font-size:12px;color:rgba(234,240,255,.8);
+      padding:6px 10px;border-radius:12px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+    }
+
+    .c1{grid-column: span 7;}
+    .c2{grid-column: span 5;}
+    .c3{grid-column: span 6;}
+    .c4{grid-column: span 6;}
+
+    ul.clean{margin:0;padding-left:18px;color:var(--muted);font-size:14px;line-height:1.7}
+    .steps{
+      display:grid;
+      gap:10px;
+      margin-top:10px;
+    }
+    .step{
+      display:flex;gap:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .step .num{
+      width:24px;height:24px;border-radius:10px;
+      display:flex;align-items:center;justify-content:center;
+      background: rgba(242,182,76,.14);
+      border:1px solid rgba(242,182,76,.25);
+      color: rgba(242,182,76,.95);
+      font-weight:800;font-size:12px;
+      flex:0 0 auto;
+      margin-top:1px;
+    }
+    .step .txt{color:var(--muted);font-size:14px;line-height:1.45}
+
+    .hr{
+      height:1px;background: rgba(255,255,255,.10);
+      margin:16px 0;
+      border-radius:999px;
+    }
+
+    /* footer */
+    .footer{
+      margin-top:18px;
+      text-align:center;
+      color: rgba(234,240,255,.60);
+      font-size:12px;
+      opacity:.92;
+    }
+    .footer a{
+      color: rgba(234,240,255,.78);
+      text-decoration:none;
+      border-bottom:1px solid rgba(234,240,255,.18);
+    }
+    .footer a:hover{border-bottom-color: rgba(234,240,255,.40)}
+
+    /* responsive */
+    @media (max-width: 880px){
+      .heroInner{grid-template-columns:1fr}
+      .hero{min-height:360px}
+      .c1,.c2,.c3,.c4{grid-column: span 12;}
+      .hero h1{font-size:32px}
+    }
+  </style>
 </head>
 
 <body>
-  <div class="container">
-    <!-- TOP BAR -->
+  <div class="wrap">
+
     <div class="topbar">
       <div class="brand">
-        <img src="./olynt-logo.png" alt="Olynt" class="logo-img" />
-        <div>
-          <h1>Olynt Pay</h1>
-          <p>Merchant payments • USDC + USDT • Multi-network • 2% fee added on top</p>
-        </div>
+        <img src="/icon-124.png" alt="Olynt Pay" />
+        <div class="title">Olynt Pay <span class="beta">BETA</span></div>
       </div>
 
       <div class="nav">
-        <a class="pill" href="./index.html">POS</a>
-        <a class="pill" href="./create-link.html">Create Link</a>
-        <a class="pill" href="./pay.html">Pay</a>
-        <a class="pill active" href="./merchants.html">Merchants</a>
+        <a href="/">POS</a>
+        <a href="/link.html">Create Link</a>
+        <a href="/pay.html">Pay</a>
+        <a href="/merchants.html" style="border-color:rgba(255,255,255,.14);background:rgba(255,255,255,.06);">Merchants</a>
       </div>
     </div>
 
-    <!-- HERO -->
-    <div class="card">
-      <h2>Accept USDC / USDT with a QR code</h2>
-      <p class="muted" style="line-height:1.6;margin-top:6px;">
-        Olynt Pay lets merchants accept <b>stablecoin payments</b> using simple <b>QR codes</b> and
-        <b>payment links</b>. Customers pay directly from their wallet — funds go straight to your wallet.
-      </p>
+    <section class="hero">
+      <div class="heroInner">
+        <div>
+          <h1>Accept USDC &amp; USDT<br/>with QR codes.</h1>
+          <p>
+            Olynt Pay is a non-custodial checkout that lets merchants accept stablecoins across multiple networks.
+            Customers scan a QR or open a payment link and pay from their wallet — funds go directly to you.
+          </p>
 
-      <div class="actions" style="margin-top:14px;">
-        <a class="btn primary" href="./index.html">Open POS</a>
-        <a class="btn" href="./create-link.html">Create a Payment Link</a>
-        <a class="btn" href="mailto:merchants@olyntpay.com?subject=Olynt%20Pay%20Merchant%20Beta%20Request">Request Merchant Beta</a>
+          <div class="pillrow">
+            <div class="pill">Non-custodial</div>
+            <div class="pill">QR + Payment links</div>
+            <div class="pill">Multi-network</div>
+            <div class="pill">2% fee (added on top)</div>
+          </div>
+        </div>
+
+        <div class="ctaBox">
+          <div class="label">Start merchant onboarding</div>
+          <div class="big">
+            Want early access + support? Email us and we’ll help you launch your first QR in minutes.
+          </div>
+          <div class="btnRow">
+            <button class="btn primary" onclick="window.location.href='mailto:merchants@olyntpay.com?subject=Olynt%20Pay%20Merchant%20Beta%20Request&body=Business%20name%3A%0ALocation%3A%0AType%20of%20business%3A%0APreferred%20networks%3A%0AUSDC%2FUSDT%20only%20or%20both%3A%0AContact%20name%3A%0A'">
+              Request Merchant Beta
+            </button>
+            <button class="btn ghost" onclick="window.location.href='/'">Open POS</button>
+          </div>
+          <div class="hr"></div>
+          <div style="font-size:12px;color:rgba(234,240,255,.60);line-height:1.5">
+            Tip: for best UX, customers should open the Pay page inside a wallet browser (Coinbase Wallet / MetaMask).
+          </div>
+        </div>
       </div>
+    </section>
 
-      <p class="hint">
-        <b>Non-custodial:</b> Olynt Pay never holds your funds — customers pay your wallet directly on-chain.
-      </p>
-    </div>
-
-    <!-- FEATURES -->
     <div class="grid">
-      <div class="card">
-        <h2>What merchants get</h2>
-        <ul class="muted" style="margin:10px 0 0; padding-left:18px; line-height:1.8;">
-          <li><b>USDC + USDT</b> stablecoin checkout</li>
-          <li><b>Multi-network support</b> (customers choose the supported network)</li>
-          <li><b>QR code POS</b> for in-store payments</li>
-          <li><b>Payment links</b> for invoices & remote sales</li>
-          <li><b>2% fee added on top</b> (customer pays merchant amount + fee)</li>
-          <li><b>Receipts</b> via transaction hashes (on-chain proof)</li>
+
+      <div class="card c1">
+        <h3>What merchants get</h3>
+        <ul class="clean">
+          <li>USDC + USDT checkout (stablecoin payments)</li>
+          <li>Multi-network support (customers choose their preferred chain)</li>
+          <li>QR code checkout for in-person payments</li>
+          <li>Payment links for invoices, remote sales, and delivery</li>
+          <li>Receipts via transaction hash (on-chain proof)</li>
         </ul>
-      </div>
-
-      <div class="card">
-        <h2>How it works</h2>
-        <ol class="muted" style="margin:10px 0 0; padding-left:18px; line-height:1.8;">
-          <li>Merchant enters amount (or creates a payment link).</li>
-          <li>Olynt generates a <b>QR code</b> and a shareable link.</li>
-          <li>Customer scans, connects a wallet, and pays.</li>
-          <li>Customer confirms <b>two transfers</b>: merchant amount + 2% fee to treasury.</li>
-          <li>Merchant verifies via tx hash on the explorer.</li>
-        </ol>
-        <div class="status good" style="margin-top:14px;">
-          Tip: For best UX, customers should open the pay page inside a wallet browser (MetaMask, Coinbase Wallet) or use WalletConnect when enabled.
+        <div class="kpi">
+          <div class="tag">Fast checkout</div>
+          <div class="tag">No app install</div>
+          <div class="tag">On-chain proof</div>
         </div>
       </div>
+
+      <div class="card c2">
+        <h3>Pricing</h3>
+        <p>
+          <b>2% fee</b> is added on top and paid by the customer (you receive the full amount).
+        </p>
+        <div class="hr"></div>
+        <p style="color:rgba(234,240,255,.78)">
+          No monthly fees • No setup fees • Non-custodial
+        </p>
+        <div class="hr"></div>
+        <p style="font-size:12px;color:rgba(234,240,255,.58);line-height:1.5">
+          You can choose to disable the fee for your own promos later.
+        </p>
+      </div>
+
+      <div class="card c3">
+        <h3>How it works</h3>
+        <div class="steps">
+          <div class="step"><div class="num">1</div><div class="txt">Merchant creates a QR code or payment link.</div></div>
+          <div class="step"><div class="num">2</div><div class="txt">Customer scans (or opens link) and chooses USDC/USDT + network.</div></div>
+          <div class="step"><div class="num">3</div><div class="txt">Customer confirms payment in their wallet.</div></div>
+          <div class="step"><div class="num">4</div><div class="txt">Funds arrive directly in the merchant wallet (on-chain).</div></div>
+        </div>
+      </div>
+
+      <div class="card c4">
+        <h3>Best for</h3>
+        <div class="steps">
+          <div class="step"><div class="num">✓</div><div class="txt">Shops &amp; stores — fast QR checkout at the counter</div></div>
+          <div class="step"><div class="num">✓</div><div class="txt">Restaurants — pay at table + tips</div></div>
+          <div class="step"><div class="num">✓</div><div class="txt">Service businesses — barbers, freelancers, repairs</div></div>
+          <div class="step"><div class="num">✓</div><div class="txt">Online sellers — invoices via payment links</div></div>
+        </div>
+      </div>
+
     </div>
 
-    <!-- WHO IT'S FOR -->
-    <div class="card">
-      <h2>Best for</h2>
-      <div class="grid" style="grid-template-columns:1fr;gap:10px;">
-        <div class="status" style="margin:0;">
-          <b>Shops & stores</b> — fast QR checkout at the counter
-        </div>
-        <div class="status" style="margin:0;">
-          <b>Restaurants</b> — pay at table + tips
-        </div>
-        <div class="status" style="margin:0;">
-          <b>Service businesses</b> — barbers, freelancers, repairs, deliveries
-        </div>
-        <div class="status" style="margin:0;">
-          <b>Online sellers</b> — invoices via payment links
-        </div>
-      </div>
-    </div>
-
-    <!-- PRICING -->
-    <div class="card">
-      <h2>Fees</h2>
-      <p class="muted" style="line-height:1.7;margin-top:6px;">
-        Olynt Pay charges a <b>2% fee added on top</b> of the merchant amount. Example:
-      </p>
-      <div class="status" style="margin-top:12px;">
-        If a merchant charges <b>$100</b>, the customer pays <b>$102</b> total:
-        <br/>• <b>$100</b> → merchant wallet
-        <br/>• <b>$2</b> → Olynt treasury (fee)
-      </div>
-      <p class="hint">
-        Network gas fees are paid by the customer’s wallet (depends on the network).
-      </p>
-    </div>
-
-    <!-- COMPLIANCE / DISCLAIMERS -->
-    <div class="card">
-      <h2>Important notes</h2>
-      <ul class="muted" style="margin:10px 0 0; padding-left:18px; line-height:1.8;">
-        <li><b>Non-custodial tool:</b> Olynt Pay does not store, custody, or control user funds.</li>
-        <li><b>Merchant responsibility:</b> Merchants are responsible for compliance with local laws and tax obligations.</li>
-        <li><b>Beta:</b> Features may change as we improve performance and add wallet connection options.</li>
-      </ul>
-      <div class="actions" style="margin-top:14px;">
-        <a class="btn" href="mailto:support@olyntpay.com?subject=Olynt%20Pay%20Support">Contact Support</a>
-        <a class="btn primary" href="mailto:merchants@olyntpay.com?subject=Olynt%20Pay%20Merchant%20Beta%20Request">Become a Merchant</a>
-      </div>
-    </div>
-
-    <!-- FOOTER -->
     <div class="footer">
-      © <span id="year"></span> Olynt ·
-      <a href="./terms.html" style="color:inherit;">Terms</a> ·
-      <a href="./privacy.html" style="color:inherit;">Privacy</a> ·
-      <a href="./merchants.html" style="color:inherit;">Merchants</a>
+      © 2026 Olynt · <a href="/terms.html">Terms</a> · <a href="/privacy.html">Privacy</a> ·
+      <a href="mailto:support@olyntpay.com">support@olyntpay.com</a>
     </div>
-  </div>
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+  </div>
 </body>
 </html>
