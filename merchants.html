@@ -1,0 +1,144 @@
+<!-- merchants.html — Olynt Pay (Merchant Page) -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Olynt Pay — Merchants</title>
+  <link rel="stylesheet" href="./styles.css" />
+
+  <!-- Optional: if you already added manifest support -->
+  <!-- <link rel="manifest" href="/manifest.json"> -->
+</head>
+
+<body>
+  <div class="container">
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <div class="brand">
+        <img src="./olynt-logo.png" alt="Olynt" class="logo-img" />
+        <div>
+          <h1>Olynt Pay</h1>
+          <p>Merchant payments • USDC + USDT • Multi-network • 2% fee added on top</p>
+        </div>
+      </div>
+
+      <div class="nav">
+        <a class="pill" href="./index.html">POS</a>
+        <a class="pill" href="./create-link.html">Create Link</a>
+        <a class="pill" href="./pay.html">Pay</a>
+        <a class="pill active" href="./merchants.html">Merchants</a>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="card">
+      <h2>Accept USDC / USDT with a QR code</h2>
+      <p class="muted" style="line-height:1.6;margin-top:6px;">
+        Olynt Pay lets merchants accept <b>stablecoin payments</b> using simple <b>QR codes</b> and
+        <b>payment links</b>. Customers pay directly from their wallet — funds go straight to your wallet.
+      </p>
+
+      <div class="actions" style="margin-top:14px;">
+        <a class="btn primary" href="./index.html">Open POS</a>
+        <a class="btn" href="./create-link.html">Create a Payment Link</a>
+        <a class="btn" href="mailto:merchants@olyntpay.com?subject=Olynt%20Pay%20Merchant%20Beta%20Request">Request Merchant Beta</a>
+      </div>
+
+      <p class="hint">
+        <b>Non-custodial:</b> Olynt Pay never holds your funds — customers pay your wallet directly on-chain.
+      </p>
+    </div>
+
+    <!-- FEATURES -->
+    <div class="grid">
+      <div class="card">
+        <h2>What merchants get</h2>
+        <ul class="muted" style="margin:10px 0 0; padding-left:18px; line-height:1.8;">
+          <li><b>USDC + USDT</b> stablecoin checkout</li>
+          <li><b>Multi-network support</b> (customers choose the supported network)</li>
+          <li><b>QR code POS</b> for in-store payments</li>
+          <li><b>Payment links</b> for invoices & remote sales</li>
+          <li><b>2% fee added on top</b> (customer pays merchant amount + fee)</li>
+          <li><b>Receipts</b> via transaction hashes (on-chain proof)</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>How it works</h2>
+        <ol class="muted" style="margin:10px 0 0; padding-left:18px; line-height:1.8;">
+          <li>Merchant enters amount (or creates a payment link).</li>
+          <li>Olynt generates a <b>QR code</b> and a shareable link.</li>
+          <li>Customer scans, connects a wallet, and pays.</li>
+          <li>Customer confirms <b>two transfers</b>: merchant amount + 2% fee to treasury.</li>
+          <li>Merchant verifies via tx hash on the explorer.</li>
+        </ol>
+        <div class="status good" style="margin-top:14px;">
+          Tip: For best UX, customers should open the pay page inside a wallet browser (MetaMask, Coinbase Wallet) or use WalletConnect when enabled.
+        </div>
+      </div>
+    </div>
+
+    <!-- WHO IT'S FOR -->
+    <div class="card">
+      <h2>Best for</h2>
+      <div class="grid" style="grid-template-columns:1fr;gap:10px;">
+        <div class="status" style="margin:0;">
+          <b>Shops & stores</b> — fast QR checkout at the counter
+        </div>
+        <div class="status" style="margin:0;">
+          <b>Restaurants</b> — pay at table + tips
+        </div>
+        <div class="status" style="margin:0;">
+          <b>Service businesses</b> — barbers, freelancers, repairs, deliveries
+        </div>
+        <div class="status" style="margin:0;">
+          <b>Online sellers</b> — invoices via payment links
+        </div>
+      </div>
+    </div>
+
+    <!-- PRICING -->
+    <div class="card">
+      <h2>Fees</h2>
+      <p class="muted" style="line-height:1.7;margin-top:6px;">
+        Olynt Pay charges a <b>2% fee added on top</b> of the merchant amount. Example:
+      </p>
+      <div class="status" style="margin-top:12px;">
+        If a merchant charges <b>$100</b>, the customer pays <b>$102</b> total:
+        <br/>• <b>$100</b> → merchant wallet
+        <br/>• <b>$2</b> → Olynt treasury (fee)
+      </div>
+      <p class="hint">
+        Network gas fees are paid by the customer’s wallet (depends on the network).
+      </p>
+    </div>
+
+    <!-- COMPLIANCE / DISCLAIMERS -->
+    <div class="card">
+      <h2>Important notes</h2>
+      <ul class="muted" style="margin:10px 0 0; padding-left:18px; line-height:1.8;">
+        <li><b>Non-custodial tool:</b> Olynt Pay does not store, custody, or control user funds.</li>
+        <li><b>Merchant responsibility:</b> Merchants are responsible for compliance with local laws and tax obligations.</li>
+        <li><b>Beta:</b> Features may change as we improve performance and add wallet connection options.</li>
+      </ul>
+      <div class="actions" style="margin-top:14px;">
+        <a class="btn" href="mailto:support@olyntpay.com?subject=Olynt%20Pay%20Support">Contact Support</a>
+        <a class="btn primary" href="mailto:merchants@olyntpay.com?subject=Olynt%20Pay%20Merchant%20Beta%20Request">Become a Merchant</a>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      © <span id="year"></span> Olynt ·
+      <a href="./terms.html" style="color:inherit;">Terms</a> ·
+      <a href="./privacy.html" style="color:inherit;">Privacy</a> ·
+      <a href="./merchants.html" style="color:inherit;">Merchants</a>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
